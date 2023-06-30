@@ -1,4 +1,4 @@
-#! /bin/bash
+#! /bin/bash -x
 sudo apt-get update -y
 sudo apt-get install bluez bluez-tools -y
 sudo apt-get install bluez-firmware python-bluez python-dev python-pip -y
@@ -13,4 +13,4 @@ sudo systemctl daemon-reload
 sudo /etc/init.d/bluetooth start
 sudo apt-get install python3-gi -y
 sudo apt install python3-pip -y
-sudo pip3 install PyBluez
+# sudo pip3 install PyBluez

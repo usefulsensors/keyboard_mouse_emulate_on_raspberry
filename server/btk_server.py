@@ -25,7 +25,8 @@ logging.basicConfig(level=logging.DEBUG)
 
 class BTKbDevice():
     # change these constants
-    MY_ADDRESS = "B8:27:EB:C5:B3:27"
+    # MY_ADDRESS = "C0:FB:F9:60:20:0C"
+    MY_ADDRESS = "C0:FB:F9:60:20:0C"
     MY_DEV_NAME = "ThanhLe_Keyboard_Mouse"
 
     # define some constants
@@ -34,7 +35,8 @@ class BTKbDevice():
     # dbus path of the bluez profile we will create
     # file path of the sdp record to load
     SDP_RECORD_PATH = sys.path[0] + "/sdp_record.xml"
-    UUID = "00001124-0000-1000-8000-00805f9b34fb"
+    # UUID = "00001124-0000-1000-8000-00805f9b34fb"
+    UUID = "00001124-0000-1000-8000-00805f9b34fc"
 
     def __init__(self):
         print("2. Setting up BT device")
