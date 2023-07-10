@@ -25,8 +25,8 @@ logging.basicConfig(level=logging.DEBUG)
 
 class BTKbDevice():
     # change these constants
-    # MY_ADDRESS = "C0:FB:F9:60:20:0C"
-    MY_ADDRESS = "C0:FB:F9:60:20:0C"
+    # MY_ADDRESS = "1C:BF:CE:E5:36:BA"
+    MY_ADDRESS = "1C:BF:CE:E5:36:BA"
     MY_DEV_NAME = "ThanhLe_Keyboard_Mouse"
 
     # define some constants
@@ -35,8 +35,8 @@ class BTKbDevice():
     # dbus path of the bluez profile we will create
     # file path of the sdp record to load
     SDP_RECORD_PATH = sys.path[0] + "/sdp_record.xml"
-    # UUID = "00001124-0000-1000-8000-00805f9b34fb"
-    UUID = "00001124-0000-1000-8000-00805f9b34fc"
+    UUID = "00001124-0000-1000-8000-00805f9b34fb"
+    # UUID = "00001124-0000-1000-8000-00805f9b34fc"
 
     def __init__(self):
         print("2. Setting up BT device")
@@ -51,6 +51,7 @@ class BTKbDevice():
         os.system("hciconfig hci0 name " + BTKbDevice.MY_DEV_NAME)
         # make the device discoverable
         os.system("hciconfig hci0 piscan")
+        # os.system("hciconfig hci0 noauth")
 
     # set up a bluez profile to advertise device capabilities from a loaded service record
     def init_bluez_profile(self):

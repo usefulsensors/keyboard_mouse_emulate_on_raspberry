@@ -100,7 +100,7 @@
 		<uint16 value="0x0c80" />
 	</attribute>
 	<attribute id="0x020d">
-		<boolean value="false" />
+		<boolean value="true" />
 	</attribute>
 	<attribute id="0x020e">
 		<boolean value="false" />
