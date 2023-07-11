@@ -1,4 +1,7 @@
-#!/usr/bin/bash -x
+#!/usr/bin/bash -xe
+
+cd -- "$( dirname -- "${BASH_SOURCE[0]:-$0}"; )"
+
 #Stop the background process
 sudo hciconfig hci0 down
 sudo systemctl daemon-reload
@@ -12,4 +15,4 @@ export C_PATH=$(pwd)
 
 python3 server/input_agent.py 2>&1 >/tmp/input_agent_log.txt &
 
-sudo server/btk_server.py
+sudo server/btk_server.py 2>&1 >/tmp/bt_server_log.txt &
