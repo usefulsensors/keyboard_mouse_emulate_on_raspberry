@@ -55,6 +55,8 @@ class BtkStringClient():
             ">": "key_dot",
             "?": "key_slash",
             " ": "KEY_SPACE",
+            "\n": "KEY_ENTER",
+            "\b": "KEY_BACKSPACE",
         }
 
         # connect with the Bluetooth keyboard server
