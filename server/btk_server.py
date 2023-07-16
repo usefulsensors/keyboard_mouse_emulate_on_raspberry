@@ -25,7 +25,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 class BTKbDevice():
     # change these constants
-    MY_ADDRESS = "1C:BF:CE:E5:36:BA"
+    MY_ADDRESS = "C0:FB:F9:60:1F:49"
     MY_DEV_NAME = "Caption_Box_Keyboard"
 
     # define some constants
@@ -87,6 +87,8 @@ class BTKbDevice():
             socket.AF_BLUETOOTH, socket.SOCK_SEQPACKET, socket.BTPROTO_L2CAP)  # BluetoothSocket(L2CAP)
         self.scontrol.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.sinterrupt.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        self.scontrol.settimeout(0.2)
+        self.sinterrupt.settimeout(0.2)
         # bind these sockets to a port - port zero to select next available
         self.scontrol.bind((socket.BDADDR_ANY, self.P_CTRL))
         self.sinterrupt.bind((socket.BDADDR_ANY, self.P_INTR))
@@ -95,16 +97,36 @@ class BTKbDevice():
         self.scontrol.listen(5)
         self.sinterrupt.listen(5)
 
-        self.ccontrol, cinfo = self.scontrol.accept()
-        print (
-            "\033[0;32mGot a connection on the control channel from %s \033[0m" % cinfo[0])
+        self.ccontrol = None
+        self.cinterrupt = None
 
-        self.cinterrupt, cinfo = self.sinterrupt.accept()
-        print (
-            "\033[0;32mGot a connection on the interrupt channel from %s \033[0m" % cinfo[0])
+        self.try_to_connect()
+
+    def try_to_connect(self):
+        if self.ccontrol and self.cinterrupt:
+            return
+        
+        try:
+            self.ccontrol, cinfo = self.scontrol.accept()
+            print (
+                "\033[0;32mGot a connection on the control channel from %s \033[0m" % cinfo[0])
+
+            self.cinterrupt, cinfo = self.sinterrupt.accept()
+            print (
+                "\033[0;32mGot a connection on the interrupt channel from %s \033[0m" % cinfo[0])
+        except socket.timeout:
+            self.ccontrol = None
+            self.cinterrupt = None
+        except:
+            raise
 
     # send a string to the bluetooth host machine
     def send_string(self, message):
+        self.try_to_connect()
+        if not self.cinterrupt:
+            print("No Bluetooth device connected, string not sent")
+            return
+        
         try:
             self.cinterrupt.send(bytes(message))
         except OSError as err:
@@ -128,7 +150,6 @@ class BTKbService(dbus.service.Object):
     @dbus.service.method('org.thanhle.btkbservice', in_signature='yay')
     def send_keys(self, modifier_byte, keys):
         print("Get send_keys request through dbus")
-        print("key msg: ", keys)
         state = [ 0xA1, 1, 0, 0, 0, 0, 0, 0, 0, 0 ]
         state[2] = int(modifier_byte)
         count = 4
