@@ -22,6 +22,7 @@ from bluetooth import *
 
 logging.basicConfig(level=logging.DEBUG)
 
+CHECK_DELAY = 15.0
 
 class BTKbDevice():
     # change these constants
@@ -99,6 +100,7 @@ class BTKbDevice():
 
         self.ccontrol = None
         self.cinterrupt = None
+        self.last_check_time = time.time()
 
         self.try_to_connect()
 
@@ -106,6 +108,12 @@ class BTKbDevice():
         if self.ccontrol and self.cinterrupt:
             return
         
+        current_time = time.time()
+        if current_time - self.last_check_time < CHECK_DELAY:
+            return
+
+        self.last_check_time = current_time
+
         try:
             self.ccontrol, cinfo = self.scontrol.accept()
             print (
