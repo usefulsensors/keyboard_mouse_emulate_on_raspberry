@@ -13,6 +13,6 @@ sudo /etc/init.d/bluetooth start
 #Get current Path
 export C_PATH=$(pwd)
 
-python3 -u server/input_agent.py 2>&1 >/tmp/input_agent_log.txt &
+python3 -u server/input_agent2.py 2>&1 >/tmp/input_agent_log.txt &
 
 sudo python3 -u server/btk_server.py 2>&1 >/tmp/bt_server_log.txt &
